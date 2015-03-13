@@ -1,3 +1,0 @@
-Connect multiple devices via bluetooth (air hockey example?)
-------------------------------------------------------------
-https://groups.google.com/forum/#!topic/android-developers/adeBD275u30
