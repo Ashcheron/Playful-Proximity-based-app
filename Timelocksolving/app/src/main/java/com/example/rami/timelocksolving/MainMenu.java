@@ -3,12 +3,11 @@ package com.example.rami.timelocksolving;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class MainMenu extends Activity {
@@ -16,15 +15,21 @@ public class MainMenu extends Activity {
     Button solveButton;
     Button profileButton;
     Button inventoryButton;
-    private Timer mTimer;
+    Handler mHandler;
+
+
+    boolean mIsRunning;
+    int timer;
 
     final static int SOLVE_TIME_IN_SECONDS = 10;
+    final static int TICK_INTERVAL = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
-        mTimer = null;
+        mHandler = new Handler();
+        timer = 0;
 
         prepareActivities();
 
@@ -48,7 +53,9 @@ public class MainMenu extends Activity {
                     Toast.makeText(MainMenu.this, "Resetting", Toast.LENGTH_SHORT).show();
 
                     v.setEnabled(false);
-                    reload();
+                    startTimer();
+
+                    Log.d("Button", "Disabled");
                 }
             }
         });
@@ -56,7 +63,7 @@ public class MainMenu extends Activity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(MainMenu.this, "WIP", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -67,41 +74,53 @@ public class MainMenu extends Activity {
             }
         });
 
-
     }
 
-    public void reload() {
-        resetTimer();
+    public void enableSolving() {
+        Toast.makeText(MainMenu.this,"You can solve now!", Toast.LENGTH_SHORT).show();
+        solveButton.setEnabled(true);
+        stopTimer();
 
-        mTimer = new Timer();
-
-        checkTime();
+        Log.d("Button","Enabled");
     }
 
-    public void resetTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-            mTimer = null;
-        }
+    public void stopTimer() {
+        mIsRunning = false;
+        mHandler.removeCallbacks(mRunnable);
     }
 
-    public void checkTime() {
-        mTimer.schedule(new TimerTask() {
+    public void startTimer() {
+        mIsRunning = true;
+        timer = SOLVE_TIME_IN_SECONDS;
+        mRunnable.run();
+    }
 
-
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainMenu.this, "You can solve now!", Toast.LENGTH_LONG).show();
-                        solveButton.setEnabled(true);
-                    }
-                });
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!mIsRunning) {
+                return;
             }
-        }, SOLVE_TIME_IN_SECONDS * 1000);
+
+            doWork();
+
+            Log.d("Handlers", "Called");
+
+            // Repeat this runnable code block again every second
+            mHandler.postDelayed(mRunnable, 1000);
+        }
+    };
+
+    public void doWork() {
+        if (timer <= 0) {
+            enableSolving();
+            solveButton.setText(getString(R.string.solver));
+        }
+
+        else {
+            timer--;
+            solveButton.setText("Solve in: " + timer);
+        }
     }
 
 }
