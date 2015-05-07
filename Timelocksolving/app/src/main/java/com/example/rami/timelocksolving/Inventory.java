@@ -1,5 +1,6 @@
 package com.example.rami.timelocksolving;
 
+import android.app.ListActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,23 +10,18 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+/**
+ * Inventory page with custom adapter
+ */
 
-public class Inventory extends ActionBarActivity {
+public class Inventory extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inventory);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageAdapter(this));
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(Inventory.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        String[] items = new String[] { "Knife", "Fingerprint", "Autopsy" };
+        InventoryAdapter adapter = new InventoryAdapter(this,items);
+        setListAdapter(adapter);
     }
 }

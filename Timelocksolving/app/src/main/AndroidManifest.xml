@@ -18,11 +18,15 @@
         </activity>
         <activity
             android:name=".MainMenu"
-            android:label="@string/title_activity_profile" >
+            android:label="@string/title_activity_mainmenu" >
         </activity>
         <activity
             android:name=".Inventory"
             android:label="@string/title_activity_inventory" >
+        </activity>
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 

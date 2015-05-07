@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Acts as a start screen
+ */
 
 public class MainActivity extends ActionBarActivity
 {
