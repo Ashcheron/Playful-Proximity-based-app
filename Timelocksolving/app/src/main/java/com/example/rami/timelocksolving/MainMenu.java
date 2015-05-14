@@ -1,18 +1,23 @@
 package com.example.rami.timelocksolving;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 /**
  * Main menu where you can access all of the screens
  *
- * NOTE TO SELF: CREATE OPTION MENU WHERE YOU CAN CHANGE SOLVE TIME
+ * ADD SAVING FOR PROFILE
  */
 public class MainMenu extends ActionBarActivity {
 
@@ -27,6 +32,7 @@ public class MainMenu extends ActionBarActivity {
     //
     boolean mIsRunning;
     int timer;
+    SharedPreferences prefs;
 
     // Static variables
     final static int SOLVE_TIME_IN_SECONDS = 10;
@@ -37,11 +43,52 @@ public class MainMenu extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
+        firstTimePlaying();
+
         mHandler = new Handler();
         timer = 0;
 
         prepareActivities();
+    }
 
+    private void firstTimePlaying() {
+        Boolean firstTime = prefs.getBoolean(getResources().getString(R.string.setting_value_firstTime), true);
+
+        if (firstTime) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            final EditText edittext= new EditText(this);
+            alert.setMessage("Enter your player name");
+            alert.setTitle("Enter name");
+
+            alert.setView(edittext);
+
+            alert.setNegativeButton("Use Default", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    prefs.edit().putString(getResources().getString(R.string.setting_value_playerName), "Neew Player").commit();
+                    prefs.edit().putBoolean(getResources().getString(R.string.setting_value_firstTime),false).commit();
+                }
+            });
+
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    String YouEditTextValue = edittext.getText().toString();
+                    prefs.edit().putString(getResources().getString(R.string.setting_value_playerName), YouEditTextValue).commit();
+                    prefs.edit().putBoolean(getResources().getString(R.string.setting_value_firstTime), false).commit();
+
+                }
+            });
+
+            alert.show();
+
+
+        }
+        else {
+            String playerName = prefs.getString("playerName", "PlayerName");
+        }
     }
 
     /**
@@ -56,6 +103,7 @@ public class MainMenu extends ActionBarActivity {
         // Intents here
         final Intent intentProfile = new Intent(MainMenu.this, Profile.class);
         final Intent intentInventory = new Intent(MainMenu.this,Inventory.class);
+        final Intent intentSolve;
 
         // OnClickListerners for each button
 
@@ -146,7 +194,7 @@ public class MainMenu extends ActionBarActivity {
 
 
     /**
-     * This method is invoked everytime the timer "ticks"
+     * This method is invoked every time the timer "ticks"
      */
     public void doWork() {
         if (timer <= 0) {

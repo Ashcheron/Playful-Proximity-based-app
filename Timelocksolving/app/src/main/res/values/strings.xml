@@ -6,4 +6,8 @@
     <string name="title_activity_inventory">Inventory</string>
     <string name="title_activity_mainmenu">MainMenu</string>
     <string name="solver">Solve</string>
+
+    <string name="setting_value_playerName">playerName</string>
+    <string name="setting_value_playerBio">playerBio</string>
+    <string name="setting_value_firstTime">firstTime</string>
 </resources>

@@ -13,13 +13,14 @@
         android:src="@drawable/sample_0"/>
 
     <TextView
-        android:id="@+id/label"
+        android:id="@+id/playerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20px"
-        android:text="PlayerName"
+        android:text="Player Name"
         android:textSize="30dp"
         android:textStyle="bold"
+        android:singleLine="true"
         android:layout_toRightOf="@id/profileIcon"/>
 
     <TextView
@@ -31,22 +32,26 @@
         android:textSize="20dp"
         android:layout_below="@id/profileIcon"/>
 
-    <Button
-        android:id="@+id/profileSave"
+    <EditText
+        android:id="@+id/playerNameEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:layout_margin="20px"
+        android:hint="Player Name"
+        android:textSize="30dp"
         android:textStyle="bold"
-        android:layout_below="@+id/biography"/>
-    <Button
-        android:id="@+id/profileCancel"
-        android:layout_width="wrap_content"
+        android:singleLine="true"
+        android:layout_toRightOf="@id/profileIcon"
+        android:background="@android:color/transparent"/>
+    <EditText
+        android:id="@+id/biographyEdit"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:textStyle="bold"
-        android:layout_below="@+id/biography"
-        android:layout_toRightOf="@+id/profileSave"/>
-
+        android:layout_margin="20px"
+        android:hint="Biography"
+        android:textSize="20dp"
+        android:layout_below="@id/profileIcon"
+        android:background="@android:color/transparent"/>
 
 
 </RelativeLayout>
