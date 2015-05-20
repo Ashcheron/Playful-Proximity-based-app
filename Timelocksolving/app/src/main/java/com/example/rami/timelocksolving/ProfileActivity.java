@@ -15,7 +15,7 @@ import android.widget.TextView;
 /**
  * Profile page
  */
-public class Profile extends ActionBarActivity {
+public class ProfileActivity extends ActionBarActivity {
 
     TextView nameView;
     TextView bioView;
@@ -36,10 +36,10 @@ public class Profile extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mSettingPlayerName = getResources().getString(R.string.setting_value_playerName);
-        mSettingPlayerBio = getResources().getString(R.string.setting_value_playerBio);
+        mSettingPlayerName = getResources().getString(R.string.setting_keypair_playerName);
+        mSettingPlayerBio = getResources().getString(R.string.setting_keypair_playerBio);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(Profile.this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(ProfileActivity.this);
 
         getAllViews();
 

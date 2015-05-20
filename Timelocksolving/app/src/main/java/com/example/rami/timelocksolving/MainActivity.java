@@ -23,8 +23,8 @@ public class MainActivity extends ActionBarActivity
 
     private void startApp()
     {
-        Button startButton = (Button) findViewById(R.id.start);
-        final Intent intent = new Intent(this,MainMenu.class);
+        Button startButton = (Button) findViewById(R.id.startButton);
+        final Intent intent = new Intent(this,MainMenuActivity.class);
 
         startButton.setOnClickListener(new View.OnClickListener()
         {

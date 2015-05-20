@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CREATE IN THIS FORM AND ADD ARRAY TO INDEX!!!:
+     <array name="CLUE_NAME">
+        <item>TITLE</item>
+        <item>DESCRIPTION
+
+        </item>
+        <item>SHORT DESCRIPTION OR SUMMARY</item>
+
+        <item>TOKEN 1</item>
+        <item>TOKEN 2</item>
+        ...etc...
+    </array>
+    -->
+
+    <!-- INDEX OF CLUES -->
+    <array name="demo_clues_index">
+        <item>@array/richard_clue1</item>
+        <item>@array/richard_clue2</item>
+        <item>@array/richard_clue3</item>
+        <item>@array/richard_clue4</item>
+    </array>
+
+    <!-- Richard -->
+    <array name="richard_clue1">
+        <item>richard_clue1</item>
+        <item>Gossip #1</item>
+        <item>You are walking through the campus when nearby students’ chatter catches your ears.\n\n\"I’m so bad at Mathematical Analysis, I think I’m gonna fail. But Richard’s classes are so boring...\"\n\n\"[Professor Richard]? From what I’ve heard there is more than one way to get good grades from here. You should meet him in his office hours, take your wallet.\"\n\nIntriguing, but could there be truth to those rumours?</item>
+        <item>Students gossip about selling grades.</item>
+        <item>@string/suspect_richard</item>
+        <item>@string/location_computer_room</item>
+    </array>
+    <array name="richard_clue2">
+        <item>richard_clue2</item>
+        <item>Blackmail note</item>
+        <item>A handwritten note by Catherina:\n\n\"I don’t understand how you get people to still pay for your services,\ndon’t they understand how blackmail works?\n\nNo matter, I do.\n\nI also know how to prove what you’re doing.\"\n\nWho was this meant to?</item>
+        <item>Blackmail material from victim to suspect.</item>
+        <item>@string/suspect_richard</item>
+    </array>
+    <array name="richard_clue3">
+        <item>richard_clue3</item>
+        <item>Final exams</item>
+        <item>You may not be the best student there ever was. But even so, it wouldnt take that much to notice that these exams are pretty bad.\nSome of the questions are not even answered, but they are still highly graded.\nStrange.\nWho is the lecturer responsible for [suspect 2 subject] again?</item>
+        <item>Bad exams with good grades</item>
+        <item>@string/suspect_richard</item>
+    </array>
+    <array name="richard_clue4">
+        <item>richard_clue4</item>
+        <item>Computer room</item>
+        <item>The logs from the computer room show that Catherina logged into her account late on the night of the murder.\nYou found no further indications of that, but would it be possible that the murder took place on the computer room?</item>
+        <item>Computer room (logged in last night)</item>
+        <item>@string/location_computer_room</item>
+        <item>@string/weapon_laptop</item>
+    </array>
+</resources>

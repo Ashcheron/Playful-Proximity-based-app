@@ -17,14 +17,17 @@ import android.widget.Toast;
 /**
  * Main menu where you can access all of the screens
  *
- * ADD SAVING FOR PROFILE
+ * NOTES:
+ * SOLVE SCREEN, PRESS TO OPEN CATEGORY INVETORY -> UPDATE VIEW
+ * CLUES -> LORE, CLUE HAS TOKENS, TOKENS USED TO CAST MURDERER
  */
-public class MainMenu extends ActionBarActivity {
+public class MainMenuActivity extends ActionBarActivity {
 
     // Buttons for the menu
     Button solveButton;
     Button profileButton;
     Button inventoryButton;
+    Button startButton;
 
     // Handler to use timed lock
     Handler mHandler;
@@ -43,7 +46,7 @@ public class MainMenu extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmenu);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenuActivity.this);
         firstTimePlaying();
 
         mHandler = new Handler();
@@ -52,8 +55,11 @@ public class MainMenu extends ActionBarActivity {
         prepareActivities();
     }
 
+    /**
+     * Checks if player has started the game for first time and asks for username.
+     */
     private void firstTimePlaying() {
-        Boolean firstTime = prefs.getBoolean(getResources().getString(R.string.setting_value_firstTime), true);
+        Boolean firstTime = prefs.getBoolean(getResources().getString(R.string.setting_keypair_firstTime), true);
 
         if (firstTime) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -67,8 +73,8 @@ public class MainMenu extends ActionBarActivity {
             alert.setNegativeButton("Use Default", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
-                    prefs.edit().putString(getResources().getString(R.string.setting_value_playerName), "Neew Player").commit();
-                    prefs.edit().putBoolean(getResources().getString(R.string.setting_value_firstTime),false).commit();
+                    prefs.edit().putString(getResources().getString(R.string.setting_keypair_playerName), "Neew Player").commit();
+                    prefs.edit().putBoolean(getResources().getString(R.string.setting_keypair_firstTime),false).commit();
                 }
             });
 
@@ -76,8 +82,8 @@ public class MainMenu extends ActionBarActivity {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
                     String YouEditTextValue = edittext.getText().toString();
-                    prefs.edit().putString(getResources().getString(R.string.setting_value_playerName), YouEditTextValue).commit();
-                    prefs.edit().putBoolean(getResources().getString(R.string.setting_value_firstTime), false).commit();
+                    prefs.edit().putString(getResources().getString(R.string.setting_keypair_playerName), YouEditTextValue).commit();
+                    prefs.edit().putBoolean(getResources().getString(R.string.setting_keypair_firstTime), false).commit();
 
                 }
             });
@@ -96,33 +102,23 @@ public class MainMenu extends ActionBarActivity {
      */
     private void prepareActivities() {
         // Buttons here
-        solveButton = (Button) findViewById(R.id.solve);
-        profileButton = (Button) findViewById(R.id.profile);
-        inventoryButton = (Button) findViewById(R.id.inventory);
+        solveButton = (Button) findViewById(R.id.solveButton);
+        profileButton = (Button) findViewById(R.id.profileButton);
+        inventoryButton = (Button) findViewById(R.id.inventoryButton);
+        startButton = (Button) findViewById(R.id.startButton);
 
         // Intents here
-        final Intent intentProfile = new Intent(MainMenu.this, Profile.class);
-        final Intent intentInventory = new Intent(MainMenu.this,Inventory.class);
-        final Intent intentSolve;
+        final Intent intentProfile = new Intent(MainMenuActivity.this, ProfileActivity.class);
+        final Intent intentInventory = new Intent(MainMenuActivity.this, InventoryActivity.class);
+        final Intent intentSolve = new Intent(MainMenuActivity.this, SolveActivity.class);
+
+        // Passing variables
+        //intentInventory.putExtra(getResources().getString(R.string.inventory_category),99);
+
+        // Disable solve button
+        //solveButton.setEnabled(false);
 
         // OnClickListerners for each button
-
-        // For solve
-        solveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.isEnabled()) {
-                    Toast.makeText(MainMenu.this, "Resetting", Toast.LENGTH_SHORT).show();
-
-                    v.setEnabled(false);
-                    Log.d("Solve button", "Disabled");
-
-                    startTimer(SOLVE_TIME_IN_SECONDS);
-
-
-                }
-            }
-        });
 
         // For profile
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +138,33 @@ public class MainMenu extends ActionBarActivity {
             }
         });
 
+        // For solve
+        solveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.isEnabled()) {
+                    Log.d("Solve button", "Pressed");
+                    startActivity(intentSolve);
+                    startButton.setEnabled(true);
+                    startButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        // For Start
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.isEnabled()) {
+                    Log.d("Start button", "Pressed");
+                    startTimer(SOLVE_TIME_IN_SECONDS);
+                    startButton.setEnabled(false);
+                    startButton.setVisibility(View.INVISIBLE);
+                }
+
+            }
+        });
+
         // Trading etc... WIP
     }
 
@@ -149,7 +172,7 @@ public class MainMenu extends ActionBarActivity {
      * Enables solve button and stops timer to conserve resources
      */
     public void enableSolving() {
-        Toast.makeText(MainMenu.this,"You can solve now!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainMenuActivity.this,"You can solve now!", Toast.LENGTH_SHORT).show();
         solveButton.setEnabled(true);
         stopTimer();
 

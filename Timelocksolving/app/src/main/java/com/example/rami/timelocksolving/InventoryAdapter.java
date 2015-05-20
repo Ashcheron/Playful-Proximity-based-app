@@ -1,45 +1,94 @@
 package com.example.rami.timelocksolving;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Rami on 28.4.2015.
  */
-public class InventoryAdapter extends android.widget.ArrayAdapter<String> {
+public class InventoryAdapter extends android.widget.ArrayAdapter {
 
     private Context mContext;
-    private String[] items;
+    private ArrayList<Clue> clueItems;
+    private ArrayList<Token> tokenItems;
+    private int mCategory;
+
 
     /**
      * Constructor for adapter
      * @param context Context
-     * @param values String array of items
+     * @param values String array of clueItems
      */
-    public InventoryAdapter(Context context, String[] values) {
-        super(context,R.layout.rowlayout , values);
+    public InventoryAdapter(Context context, ArrayList<Clue> values) {
+        super(context, R.layout.rowlayout, values);
         mContext = context;
-        items = values;
+        clueItems = values;
+        mCategory = -1;
+    }
+
+    public InventoryAdapter(Context context, ArrayList<Token> values, int category) {
+        super(context, R.layout.rowlayout, values);
+        mContext = context;
+        tokenItems = values;
+        mCategory = category;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.label);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.profileIcon);
+
+        TextView name = (TextView) rowView.findViewById(R.id.itemLabel);
+        ImageView icon = (ImageView) rowView.findViewById(R.id.itemIcon);
+        TextView desc = (TextView) rowView.findViewById(R.id.itemDescription);
 
         // Random images for the ImageView
         int random = mThumbIds[new Random().nextInt(mThumbIds.length)];
-        imageView.setImageResource(random);
+        icon.setImageResource(random);
+        if (mCategory < 0) {
+            name.setText(clueItems.get(position).getClueTitle());
+            desc.setText(clueItems.get(position).getGetClueDescriptionShort());
 
-        textView.setText(items[position]);
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent intent = new Intent(mContext, ItemActivity.class);
+                    String clue = clueItems.get(position).getClueId();
+
+                    intent.putExtra("CLUEID", clue);
+
+                    mContext.startActivity(intent);
+
+                }
+            });
+
+        }
+        else {
+            name.setText(tokenItems.get(position).getName());
+            desc.setText(tokenItems.get(position).getTokenTypeString());
+
+            rowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent intent = new Intent(mContext, ItemActivity.class);
+                    intent.putExtra("TITLE",tokenItems.get(position).getName());
+                    ((Activity)mContext).setResult(1,intent);
+                    ((Activity)mContext).finish();
+
+                }
+            });
+
+        }
 
         return rowView;
     }

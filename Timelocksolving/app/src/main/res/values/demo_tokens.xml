@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="suspect_richard">Richard</string>
+    <string name="suspect_janet">Janet</string>
+    <string name="suspect_marc">Marc</string>
+
+    <string name="location_computer_room">Computer Room</string>
+    <string name="location_workshop">Workshop</string>
+    <string name="location_smoking_area">Smoking Area</string>
+
+    <string name="weapon_laptop">Laptop</string>
+    <string name="weapon_robot_arm">Robots Right Arm</string>
+    <string name="weapon_cracked_broom">Cracked Broom</string>
+    <string name="weapon_hammer">Hammer</string>
+    <string name="weapon_award">Sports award</string>
+</resources>
