@@ -4,6 +4,8 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 
@@ -22,12 +24,14 @@ public class InventoryActivity extends ListActivity {
     int mCategory;
     InventoryAdapter mAdapter;
     StaticItemList create;
+    PlayerInventory inventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         create = new StaticItemList(this);
+        inventory = new PlayerInventory(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -40,7 +44,9 @@ public class InventoryActivity extends ListActivity {
             Log.d("Activity extras", "No extras");
         }
 
-        createUi();
+        //if (inventory.getPlayerClues() != null || inventory.getPlayerTokens() != null) {
+            createUi();
+        //}
     }
 
     private void createUi () {
@@ -50,7 +56,6 @@ public class InventoryActivity extends ListActivity {
         }
         else {
             ArrayList<Token> items = create.getTokensWithCategory(mCategory);
-
             mAdapter = new InventoryAdapter(this, items, mCategory);
         }
 

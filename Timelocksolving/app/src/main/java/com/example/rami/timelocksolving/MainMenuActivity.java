@@ -14,6 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Random;
+import java.util.Set;
+
 /**
  * Main menu where you can access all of the screens
  *
@@ -28,6 +33,7 @@ public class MainMenuActivity extends ActionBarActivity {
     Button profileButton;
     Button inventoryButton;
     Button startButton;
+    Button resetButton;
 
     // Handler to use timed lock
     Handler mHandler;
@@ -35,10 +41,19 @@ public class MainMenuActivity extends ActionBarActivity {
     //
     boolean mIsRunning;
     int timer;
+    int[] clueTimer;
+    Integer[] generatedClueOrder;
+    int generatedIndex;
+    int clueTimerIndex;
     SharedPreferences prefs;
+    PlayerInventory mInventory;
+    StaticItemList staticItemList;
 
     // Static variables
+    final static int SOLVE_TIME_IN_HOURS = 0;
+    final static int SOLVE_TIME_IN_MINUTES = 0;
     final static int SOLVE_TIME_IN_SECONDS = 10;
+    final static int SOLVE_TIME = SOLVE_TIME_IN_HOURS * 60 + SOLVE_TIME_IN_MINUTES * 60 + SOLVE_TIME_IN_SECONDS;
     final static int TICK_INTERVAL = 1000;
 
     @Override
@@ -47,12 +62,25 @@ public class MainMenuActivity extends ActionBarActivity {
         setContentView(R.layout.activity_mainmenu);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(MainMenuActivity.this);
-        firstTimePlaying();
+        mInventory = new PlayerInventory(this);
+        staticItemList = new StaticItemList(this);
 
         mHandler = new Handler();
         timer = 0;
+        generatedIndex = 0;
+        clueTimerIndex = 0;
 
+        firstTimePlaying();
         prepareActivities();
+        /*
+        generateClueFindOrder();
+        generateTimingArrayForClues();
+        int temp = generatedClueOrder[generatedIndex];
+        ArrayList<Clue> clueTemp = staticItemList.getClueList();
+
+        mInventory.addClue(clueTemp.get(temp));
+        generatedIndex++;
+        */
     }
 
     /**
@@ -106,17 +134,15 @@ public class MainMenuActivity extends ActionBarActivity {
         profileButton = (Button) findViewById(R.id.profileButton);
         inventoryButton = (Button) findViewById(R.id.inventoryButton);
         startButton = (Button) findViewById(R.id.startButton);
+        resetButton = (Button) findViewById(R.id.resetButton);
 
         // Intents here
         final Intent intentProfile = new Intent(MainMenuActivity.this, ProfileActivity.class);
         final Intent intentInventory = new Intent(MainMenuActivity.this, InventoryActivity.class);
         final Intent intentSolve = new Intent(MainMenuActivity.this, SolveActivity.class);
 
-        // Passing variables
-        //intentInventory.putExtra(getResources().getString(R.string.inventory_category),99);
-
-        // Disable solve button
-        //solveButton.setEnabled(false);
+        // Check for game completion
+        isGameCompleted();
 
         // OnClickListerners for each button
 
@@ -145,8 +171,6 @@ public class MainMenuActivity extends ActionBarActivity {
                 if (v.isEnabled()) {
                     Log.d("Solve button", "Pressed");
                     startActivity(intentSolve);
-                    startButton.setEnabled(true);
-                    startButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -157,7 +181,12 @@ public class MainMenuActivity extends ActionBarActivity {
             public void onClick(View v) {
                 if (v.isEnabled()) {
                     Log.d("Start button", "Pressed");
-                    startTimer(SOLVE_TIME_IN_SECONDS);
+
+                    timer = 0;
+                    generatedIndex = 0;
+                    clueTimerIndex = 0;
+
+                    startTimer(SOLVE_TIME);
                     startButton.setEnabled(false);
                     startButton.setVisibility(View.INVISIBLE);
                 }
@@ -165,7 +194,34 @@ public class MainMenuActivity extends ActionBarActivity {
             }
         });
 
+        // For reset
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reset player inventory etc.
+            }
+        });
+
+
+
         // Trading etc... WIP
+    }
+
+    private void isGameCompleted() {
+        Boolean completed = prefs.getBoolean(getResources().getString(R.string.setting_keypair_completed),false);
+
+        if (completed) {
+            startButton.setEnabled(false);
+            startButton.setVisibility(View.INVISIBLE);
+            resetButton.setEnabled(true);
+            resetButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            startButton.setEnabled(true);
+            startButton.setVisibility(View.VISIBLE);
+            resetButton.setEnabled(false);
+            resetButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -226,9 +282,44 @@ public class MainMenuActivity extends ActionBarActivity {
         }
 
         else {
+            /*if (timer == clueTimer[clueTimerIndex]) {
+                addClue();
+                clueTimerIndex++;
+            }*/
             timer--;
             solveButton.setText("Solve in: " + timer);
         }
+    }
+
+    private void generateTimingArrayForClues() {
+        int a = SOLVE_TIME / staticItemList.getClueList().size();
+        int count = 0;
+        clueTimer = new int[staticItemList.getClueList().size()];
+        for (int i = staticItemList.getClueList().size(); i <= 0 ; i--) {
+            clueTimer[i] = count;
+            count += a;
+        }
+    }
+
+    private void generateClueFindOrder() {
+        Random rng = new Random();
+        Set<Integer> generated = new LinkedHashSet<Integer>();
+
+        while (generated.size() < staticItemList.getClueList().size()) {
+            Integer next = rng.nextInt(staticItemList.getClueList().size());
+
+            generated.add(next);
+            Log.d("Generated Clue order", next.toString());
+
+        }
+        generatedClueOrder = new Integer[generated.size()];
+        generated.toArray(generatedClueOrder);
+    }
+
+    private void addClue() {
+        Toast.makeText(MainMenuActivity.this,"You have received a clue",Toast.LENGTH_SHORT).show();
+        mInventory.addClue(staticItemList.getClueList().get(generatedClueOrder[generatedIndex]));
+        generatedIndex++;
     }
 
 }

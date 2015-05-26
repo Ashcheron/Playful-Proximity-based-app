@@ -82,6 +82,7 @@ public class InventoryAdapter extends android.widget.ArrayAdapter {
                 public void onClick(View v) {
                     final Intent intent = new Intent(mContext, ItemActivity.class);
                     intent.putExtra("TITLE",tokenItems.get(position).getName());
+                    intent.putExtra("TOKENID", tokenItems.get(position).getID());
                     ((Activity)mContext).setResult(1,intent);
                     ((Activity)mContext).finish();
 

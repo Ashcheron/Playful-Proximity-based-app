@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="demo_ending_index">
+        <item>@array/good_ending</item>
+        <item>@array/not_ending</item>
+        <item>@array/bad_ending</item>
+    </array>
+
+    <string name="demo_suspect">@string/suspect_richard</string>
+    <string name="demo_location">@string/location_workshop</string>
+
+    <array name="good_ending">
+        <item>Good Ending</item>
+        <item>You presented your evidence to the police and they were astonished. How could a simple student solve this case faster than them? They brought Richard in for further questioning and he confessed, apparently Catherine knew about his scheme of selling grades and so he waited until she was alone in the Workshop and murdered her. You were right! Most important is, Richard is going to jail, where he belongs!</item>
+    </array>
+    <array name="not_ending">
+        <item>Neutral Ending</item>
+        <item>You presented your evidence to the police and they were astonished. How could a simple student solve this case faster than them? They decided to investigate the location you suggested but found no concrete evidence that the murder happened there. They said they will keep on with their investigation.</item>
+    </array>
+    <array name="bad_ending">
+        <item>Bad Ending</item>
+        <item>You presented your evidence to the police and they were astonished. How could a simple student solve this case faster than them? The suspect was brought in for further questioning and was kept in jail even when denying all the evidences.
+A few days later, Professor Richard fled the town, apparently he was the real murdered all along. Too bad.</item>
+    </array>
+
+</resources>

@@ -7,21 +7,21 @@
     <string name="title_activity_mainmenu">MainMenu</string>
     <string name="title_activity_solve">Solve</string>
     <string name="title_activity_item">Item</string>
+    <string name="title_activity_ending">Ending</string>
 
     <string name="solver">Solve</string>
 
     <string name="setting_keypair_playerName">playerName</string>
     <string name="setting_keypair_playerBio">playerBio</string>
     <string name="setting_keypair_firstTime">firstTime</string>
+    <string name="setting_keypair_completed">gameComplete</string>
 
-    <string name="setting_keypair_playerSuspect"></string>
-    <string name="setting_keypair_playerWeapon"></string>
-    <string name="setting_keypair_playerLocation"></string>
+    <string name="setting_keypair_playerInventory">playerInventory</string>
+    <string name="setting_keypair_playerTokens">playerTokens</string>
 
     <string name="inventory_category">CATEGORY</string>
-    <string name="title_activity_ending">Ending</string>
 
-    <string name="hello_world">Hello world!</string>
+
 
 
 </resources>

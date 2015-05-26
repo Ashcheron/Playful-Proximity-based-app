@@ -43,25 +43,25 @@ public class StaticItemList {
     public StaticItemList(Context mContext) {
         tokenList = new ArrayList<>();
         clueList = new ArrayList<>();
-        fillEvidenceList();
+        fillEvidenceList(mContext);
         fillClues(mContext);
     }
 
-    private void fillEvidenceList() {
+    private void fillEvidenceList(Context context) {
         // CHANGE TO RESOURCES FILE!!!
-        tokenList.add(new Token(0,"Richard",0));
-        tokenList.add(new Token(1,"Janet",0));
-        tokenList.add(new Token(2,"Marc",0));
+        tokenList.add(new Token(0,context.getResources().getString(R.string.suspect_richard),0));
+        tokenList.add(new Token(1,context.getResources().getString(R.string.suspect_janet),0));
+        tokenList.add(new Token(2,context.getResources().getString(R.string.suspect_marc),0));
 
-        tokenList.add(new Token(3,"Computer Room",2));
-        tokenList.add(new Token(4,"Workshop",2));
-        tokenList.add(new Token(5,"Smoking Area",2));
+        tokenList.add(new Token(3,context.getResources().getString(R.string.location_computer_room),2));
+        tokenList.add(new Token(4,context.getResources().getString(R.string.location_workshop),2));
+        tokenList.add(new Token(5,context.getResources().getString(R.string.location_smoking_area),2));
 
-        tokenList.add(new Token(6,"Laptop",1));
-        tokenList.add(new Token(7,"Robots Right Arm",1));
-        tokenList.add(new Token(8,"Cracked Broom",1));
-        tokenList.add(new Token(9, "Hammer", 1));
-        tokenList.add(new Token(10, "Sports Award", 1));
+        tokenList.add(new Token(6,context.getResources().getString(R.string.weapon_laptop),1));
+        tokenList.add(new Token(7,context.getResources().getString(R.string.weapon_robot_arm),1));
+        tokenList.add(new Token(8,context.getResources().getString(R.string.weapon_cracked_broom),1));
+        tokenList.add(new Token(9,context.getResources().getString(R.string.weapon_hammer), 1));
+        tokenList.add(new Token(10,context.getResources().getString(R.string.weapon_award), 1));
 
     }
 
@@ -137,5 +137,15 @@ public class StaticItemList {
                 temp.add(tokenList.get(i));
         }
         return temp;
+    }
+
+    public Token findTokenByName(String name) {
+        Token token = null;
+        for (int i = 0; i < tokenList.size(); i ++) {
+            if (tokenList.get(i).getName().equals(name)) {
+                token = tokenList.get(i);
+            }
+        }
+        return token;
     }
 }

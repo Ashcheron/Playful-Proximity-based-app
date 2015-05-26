@@ -12,7 +12,7 @@ public class Token {
     /**
      *
      * @param id String id
-     * @param name String name
+     * @param name String mName
      * @param type Integer type
      */
     public Token (Integer id, String name, int type) {
@@ -27,14 +27,14 @@ public class Token {
     /* Setters and getters for attributes. */
 
     /**
-     * Set the name for the token.
+     * Set the mName for the token.
      * @param name Name of the token.
      */
     public void setName (String name) { NAME = name; }
 
     /**
-     * Get the name of the token.
-     * @return Returns name of the token in String.
+     * Get the mName of the token.
+     * @return Returns mName of the token in String.
      */
     public String getName() { return NAME; }
 
