@@ -24,7 +24,7 @@ public class ItemActivity extends ActionBarActivity {
 
     private void findItem() {
         StaticItemList staticItemList = new StaticItemList(this);
-        String id = getIntent().getStringExtra("CLUEID");
+        String id = getIntent().getStringExtra(getResources().getString(R.string.setting_keypair_clueId));
         if (!id.isEmpty())
             clue = staticItemList.findClueById(id);
     }

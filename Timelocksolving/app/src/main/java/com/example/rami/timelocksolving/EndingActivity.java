@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class Ending extends ActionBarActivity {
+public class EndingActivity extends ActionBarActivity {
 
     SharedPreferences mPrefs;
     final static int TEXT_INDEX = 1;

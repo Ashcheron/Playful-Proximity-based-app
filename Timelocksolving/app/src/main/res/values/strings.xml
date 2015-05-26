@@ -16,6 +16,11 @@
     <string name="setting_keypair_firstTime">firstTime</string>
     <string name="setting_keypair_completed">gameComplete</string>
 
+    <string name="setting_keypair_clueId">clueId</string>
+    <string name="setting_keypair_tokenId">tokenId</string>
+
+    <string name="setting_keypair_devmode">developerMode</string>
+
     <string name="setting_keypair_playerInventory">playerInventory</string>
     <string name="setting_keypair_playerTokens">playerTokens</string>
 

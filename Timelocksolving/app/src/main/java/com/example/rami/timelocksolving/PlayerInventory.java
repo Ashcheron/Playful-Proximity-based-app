@@ -14,17 +14,17 @@ import java.util.Set;
 public class PlayerInventory {
     SharedPreferences mPrefs;
     Context mContext;
-    StaticItemList items;
+    StaticItemList staticItems;
 
     public PlayerInventory(Context context) {
         mContext = context;
         mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        items = new StaticItemList(mContext);
+        staticItems = new StaticItemList(mContext);
     }
 
     public void addClue(Clue clue) {
-        Set <String> clues = new HashSet<>();
-        clues = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerInventory),null);
+        Set <String> clues;
+        clues = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerInventory),new HashSet<String>());
         String temp;
 
         //Workaround for bug in saving sets in sharedprefs
@@ -37,7 +37,7 @@ public class PlayerInventory {
 
         mPrefs.edit().putStringSet(mContext.getResources().getString(R.string.setting_keypair_playerInventory), clues).commit();
 
-        Set <String> tokens = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerTokens), null);
+        Set <String> tokens = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerTokens), new HashSet<String>());
 
         //Workaround for bug in saving sets in sharedprefs
         editor.remove(mContext.getResources().getString(R.string.setting_keypair_playerTokens));
@@ -53,18 +53,20 @@ public class PlayerInventory {
 
     public ArrayList<Clue> getPlayerClues() {
         Set<String> temp;
-        ArrayList<Clue> playerClues = null;
-        Clue clue = null;
-        String[] clues = null;
+        ArrayList<Clue> playerClues = new ArrayList<Clue>();
+        Clue clue;
 
-        temp = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerInventory),null);
+        temp = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerInventory),new HashSet<String>());
+
         if (temp == null)
             return null;
+
+        String[] clues = new String[temp.size()];
         temp.toArray(clues);
 
         if (clues != null) {
             for (int i = 0; i < clues.length; i++) {
-                clue = items.findClueById(clues[i]);
+                clue = staticItems.findClueById(clues[i]);
                 if (clue != null) {
                     playerClues.add(clue);
                 }
@@ -76,20 +78,20 @@ public class PlayerInventory {
 
     public ArrayList<Token> getPlayerTokens() {
         Set<String> temp;
-        ArrayList<Token> playerTokens = null;
-        Token token = null;
-        String[] tokens = null;
+        ArrayList<Token> playerTokens = new ArrayList<Token>();
+        Token token;
 
-        temp = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerTokens), null);
+        temp = mPrefs.getStringSet(mContext.getResources().getString(R.string.setting_keypair_playerTokens), new HashSet<String>());
 
         if (temp == null)
             return null;
 
+        String[] tokens = new String[temp.size()];
         temp.toArray(tokens);
 
         if (tokens != null) {
             for (int i = 0; i < tokens.length; i++) {
-                token = items.findTokenByName(tokens[i]);
+                token = staticItems.findTokenByName(tokens[i]);
                 if (token != null) {
                     playerTokens.add(token);
                 }
@@ -108,5 +110,12 @@ public class PlayerInventory {
                 filteredTokens.add(playerTokens.get(i));
         }
         return filteredTokens;
+    }
+
+    public void removeInventory() {
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.remove(mContext.getResources().getString(R.string.setting_keypair_playerInventory));
+        editor.remove(mContext.getResources().getString(R.string.setting_keypair_playerTokens));
+        editor.commit();
     }
 }

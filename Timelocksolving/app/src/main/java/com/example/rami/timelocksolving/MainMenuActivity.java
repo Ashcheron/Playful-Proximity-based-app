@@ -21,10 +21,6 @@ import java.util.Set;
 
 /**
  * Main menu where you can access all of the screens
- *
- * NOTES:
- * SOLVE SCREEN, PRESS TO OPEN CATEGORY INVETORY -> UPDATE VIEW
- * CLUES -> LORE, CLUE HAS TOKENS, TOKENS USED TO CAST MURDERER
  */
 public class MainMenuActivity extends ActionBarActivity {
 
@@ -38,22 +34,28 @@ public class MainMenuActivity extends ActionBarActivity {
     // Handler to use timed lock
     Handler mHandler;
 
-    //
+    // Variables
     boolean mIsRunning;
     int timer;
     int[] clueTimer;
-    Integer[] generatedClueOrder;
     int generatedIndex;
     int clueTimerIndex;
+    Integer[] generatedClueOrder;
     SharedPreferences prefs;
     PlayerInventory mInventory;
     StaticItemList staticItemList;
 
     // Static variables
+
+    // Settings for solve timer, alter these if you want
     final static int SOLVE_TIME_IN_HOURS = 0;
     final static int SOLVE_TIME_IN_MINUTES = 0;
-    final static int SOLVE_TIME_IN_SECONDS = 10;
+    final static int SOLVE_TIME_IN_SECONDS = 30;
+
+    // Converts previous values to seconds  !!!! DO NOT TOUCH THESE !!!!
     final static int SOLVE_TIME = SOLVE_TIME_IN_HOURS * 60 + SOLVE_TIME_IN_MINUTES * 60 + SOLVE_TIME_IN_SECONDS;
+
+    // Tick interval in ms
     final static int TICK_INTERVAL = 1000;
 
     @Override
@@ -67,20 +69,13 @@ public class MainMenuActivity extends ActionBarActivity {
 
         mHandler = new Handler();
         timer = 0;
-        generatedIndex = 0;
-        clueTimerIndex = 0;
 
         firstTimePlaying();
         prepareActivities();
-        /*
-        generateClueFindOrder();
-        generateTimingArrayForClues();
-        int temp = generatedClueOrder[generatedIndex];
-        ArrayList<Clue> clueTemp = staticItemList.getClueList();
 
-        mInventory.addClue(clueTemp.get(temp));
-        generatedIndex++;
-        */
+        generatedIndex = 0;
+        clueTimerIndex = 0;
+
     }
 
     /**
@@ -121,7 +116,9 @@ public class MainMenuActivity extends ActionBarActivity {
 
         }
         else {
+            // ? ? ?
             String playerName = prefs.getString("playerName", "PlayerName");
+            Toast.makeText(this,"Welcome back " + playerName,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -142,7 +139,7 @@ public class MainMenuActivity extends ActionBarActivity {
         final Intent intentSolve = new Intent(MainMenuActivity.this, SolveActivity.class);
 
         // Check for game completion
-        isGameCompleted();
+        //isGameCompleted();
 
         // OnClickListerners for each button
 
@@ -170,6 +167,7 @@ public class MainMenuActivity extends ActionBarActivity {
             public void onClick(View v) {
                 if (v.isEnabled()) {
                     Log.d("Solve button", "Pressed");
+
                     startActivity(intentSolve);
                 }
             }
@@ -186,8 +184,13 @@ public class MainMenuActivity extends ActionBarActivity {
                     generatedIndex = 0;
                     clueTimerIndex = 0;
 
+                    generateClueFindOrder();
+                    generateTimingArrayForClues();
+
                     startTimer(SOLVE_TIME);
+
                     startButton.setEnabled(false);
+                    solveButton.setEnabled(false);
                     startButton.setVisibility(View.INVISIBLE);
                 }
 
@@ -199,6 +202,14 @@ public class MainMenuActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Reset player inventory etc.
+
+                generatedIndex = 0;
+                clueTimerIndex = 0;
+
+                generateClueFindOrder();
+                generateTimingArrayForClues();
+
+                mInventory.removeInventory();
             }
         });
 
@@ -207,6 +218,10 @@ public class MainMenuActivity extends ActionBarActivity {
         // Trading etc... WIP
     }
 
+    /**
+     * Checks if the game has been completed
+     * Used to enable reset button and disable start button
+     */
     private void isGameCompleted() {
         Boolean completed = prefs.getBoolean(getResources().getString(R.string.setting_keypair_completed),false);
 
@@ -282,25 +297,35 @@ public class MainMenuActivity extends ActionBarActivity {
         }
 
         else {
-            /*if (timer == clueTimer[clueTimerIndex]) {
+            if (timer == clueTimer[clueTimerIndex]) {
                 addClue();
                 clueTimerIndex++;
-            }*/
+            }
             timer--;
             solveButton.setText("Solve in: " + timer);
         }
     }
 
+    /**
+     * Creates timing table for timer to give out clues
+     *                  !!! DANGER !!!
+     * WITH FEW SECONDS LONG TIMER CAN CAUSE UNFORSEEN PROBLEMS
+     *
+     * INTENDED TO BE USED FOR LONGER TIMES THAN [CLUE COUNT * TICK INTERVAL] SECONDS
+     */
     private void generateTimingArrayForClues() {
         int a = SOLVE_TIME / staticItemList.getClueList().size();
         int count = 0;
-        clueTimer = new int[staticItemList.getClueList().size()];
-        for (int i = staticItemList.getClueList().size(); i <= 0 ; i--) {
+        clueTimer = new int[staticItemList.getClueList().size() + 1];
+        for (int i = staticItemList.getClueList().size(); i >= 0 ; i--) {
             clueTimer[i] = count;
             count += a;
         }
     }
 
+    /**
+     * Generates random order in which the clues are received
+     */
     private void generateClueFindOrder() {
         Random rng = new Random();
         Set<Integer> generated = new LinkedHashSet<Integer>();
@@ -316,6 +341,9 @@ public class MainMenuActivity extends ActionBarActivity {
         generated.toArray(generatedClueOrder);
     }
 
+    /**
+     * Adds clue to players inventory and prompts with toast
+     */
     private void addClue() {
         Toast.makeText(MainMenuActivity.this,"You have received a clue",Toast.LENGTH_SHORT).show();
         mInventory.addClue(staticItemList.getClueList().get(generatedClueOrder[generatedIndex]));

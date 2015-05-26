@@ -3,9 +3,6 @@ package com.example.rami.timelocksolving;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 
@@ -22,7 +19,8 @@ import java.util.ArrayList;
 
 public class InventoryActivity extends ListActivity {
     int mCategory;
-    InventoryAdapter mAdapter;
+    InventoryAdapterClue mClueAdapter;
+    TokenInventoryAdapter mTokenAdapter;
     StaticItemList create;
     PlayerInventory inventory;
 
@@ -44,22 +42,24 @@ public class InventoryActivity extends ListActivity {
             Log.d("Activity extras", "No extras");
         }
 
-        //if (inventory.getPlayerClues() != null || inventory.getPlayerTokens() != null) {
-            createUi();
-        //}
+        createUi();
     }
 
     private void createUi () {
         if (mCategory < 0) {
-            ArrayList<Clue> items = create.getClueList();
-            mAdapter = new InventoryAdapter(this, items);
+            ArrayList<Clue> items = inventory.getPlayerClues();
+            //ArrayList<Clue> staticItems = create.getClueList();
+            mClueAdapter = new InventoryAdapterClue(this, items);
+            setListAdapter(mClueAdapter);
         }
         else {
-            ArrayList<Token> items = create.getTokensWithCategory(mCategory);
-            mAdapter = new InventoryAdapter(this, items, mCategory);
+            ArrayList<Token> items = inventory.getPlayerTokensWithCategory(mCategory);
+            //ArrayList<Token> staticItems = create.getTokensWithCategory(mCategory);
+            mTokenAdapter = new TokenInventoryAdapter(this, items, mCategory);
+            setListAdapter(mTokenAdapter);
         }
 
-        setListAdapter(mAdapter);
+
     }
 
 }

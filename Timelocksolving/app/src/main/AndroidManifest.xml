@@ -37,7 +37,7 @@
             android:label="@string/title_activity_item" >
         </activity>
         <activity
-            android:name=".Ending"
+            android:name=".EndingActivity"
             android:label="@string/title_activity_ending" >
         </activity>
     </application>
